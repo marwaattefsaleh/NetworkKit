@@ -2,321 +2,73 @@
 
 > A modern, protocol-oriented, concurrency-safe networking framework for Swift.
 
-NetworkKit is a modular networking library designed for iOS, macOS, watchOS, and tvOS applications. It provides a clean abstraction over HTTP networking while remaining independent of any specific networking framework.
+[![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)]()
+[![Platform](https://img.shields.io/badge/iOS-16%2B-blue.svg)]()
+[![SPM](https://img.shields.io/badge/SPM-Compatible-red.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
-Built with **Swift Concurrency**, **Protocol-Oriented Programming**, and **SOLID principles**, NetworkKit makes networking easy to extend, test, and maintain.
+NetworkKit is a modular networking framework built with **Swift Concurrency**, **Protocol-Oriented Programming**, and **SOLID principles**.
+
+It provides a clean, extensible networking layer that supports multiple transport engines, automatic authentication, retry policies, request/response interception, configurable logging, multipart uploads, and flexible response decoding.
 
 ---
 
 # Features
 
-- ✅ Native Swift Concurrency (`async/await`)
-- ✅ Protocol-Oriented Architecture
-- ✅ Modular design
-- ✅ URLSession and Alamofire support
-- ✅ Automatic request building
-- ✅ Authentication management
-- ✅ Automatic token refresh
-- ✅ Request & Response interceptors
-- ✅ Retry policies
-- ✅ Exponential backoff retry
-- ✅ Multipart uploads
-- ✅ Flexible response decoding
-- ✅ Response validation
-- ✅ Centralized error mapping
-- ✅ Configurable logging
-- ✅ Dependency Injection friendly
-- ✅ Fully testable
-- ✅ Sendable-compatible APIs
+- 🚀 Swift Concurrency (`async/await`)
+- 📦 Swift Package Manager
+- 🌐 URLSession & Alamofire support
+- 🔐 Authentication & Token Refresh
+- 🔁 Configurable Retry Policies
+- 🧩 Request & Response Interceptors
+- 📤 Multipart Uploads
+- 📄 Response Validation
+- 🔄 Flexible Response Decoding
+- 📝 Configurable Logging
+- ⚠️ Centralized Error Mapping
+- 🧪 Testable Architecture
+- 🛠 Dependency Injection Friendly
+- ✅ Sendable Compatible
 
 ---
 
-# Architecture
+# Requirements
 
-```text
-                          App
-                           │
-                           ▼
-                    NetworkClient
-                           │
-        ┌──────────────────┼──────────────────┐
-        │                  │                  │
-        ▼                  ▼                  ▼
- URLRequestBuilder     RetryExecutor      Logger
-        │                  │
-        ▼                  ▼
- RequestInterceptors   RetryPolicy
-        │
-        ▼
-      HTTPClient
-   ┌───────────────┐
-   │               │
-   ▼               ▼
-URLSession     Alamofire
-   │
-   ▼
-NetworkResponse
-   │
-   ▼
-ResponseInterceptors
-   │
-   ▼
-ResponseValidator
-   │
-   ▼
-ResponseDecoder
-   │
-   ▼
- Decodable Model
+| Platform | Version |
+|-----------|---------|
+| iOS | 16+ |
+| macOS | 13+ |
+| tvOS | 16+ |
+| watchOS | 9+ |
+| Swift | 6.0+ |
+
+---
+
+# Installation
+
+## Swift Package Manager
+
+```swift
+dependencies: [
+    .package(
+        url: "https://github.com/marwaattef/NetworkKit.git",
+        from: "1.0.0"
+    )
+]
+```
+
+Add the product to your target:
+
+```swift
+.product(
+    name: "NetworkKit",
+    package: "NetworkKit"
+)
 ```
 
 ---
 
-# Package Structure
-
-```text
-NetworkKit
-│
-├── Authentication
-├── Body
-├── Builder
-├── Configuration
-├── Core
-├── Decoding
-├── Engine
-├── Error
-├── Interceptors
-├── Logging
-├── Multipart
-├── Response
-└── Retry
-```
-
-Each module has a single responsibility and can evolve independently.
-
----
-
-# Modules
-
-## Authentication
-
-Handles authentication and credential management.
-
-Includes:
-
-- AuthenticationManager
-- TokenProvider
-- CredentialRefresher
-- AuthenticationInterceptor
-
-Features:
-
-- Access token retrieval
-- Automatic refresh
-- Token expiration handling
-
----
-
-## Builder
-
-Responsible for converting an `Endpoint` into a `URLRequest`.
-
-Handles:
-
-- Base URLs
-- Paths
-- HTTP methods
-- Query parameters
-- Headers
-- Request bodies
-- Multipart requests
-
----
-
-## Body
-
-Provides strongly typed request body implementations.
-
-Includes:
-
-- JSONBody
-- FormURLEncodedBody
-- RawBody
-- MultipartBody
-- EmptyBody
-- NoBody
-
----
-
-## Transport
-
-Executes HTTP requests.
-
-Supports multiple transport implementations:
-
-- URLSessionHTTPClient
-- AlamofireHTTPClient
-
-The transport layer is completely replaceable.
-
----
-
-## Retry
-
-Provides configurable retry strategies.
-
-Includes:
-
-- RetryPolicy
-- RetryExecutor
-- RetryDecision
-- ExponentialBackoffRetry
-
-Supports:
-
-- Retry on network failures
-- Retry on server errors
-- Retry on rate limiting
-- Credential refresh
-
----
-
-## Interceptors
-
-Allows requests and responses to be modified before and after execution.
-
-Built-in interceptors include:
-
-- AuthenticationInterceptor
-- HeadersInterceptor
-- LocaleInterceptor
-- UserAgentInterceptor
-
-Custom interceptors are easy to implement.
-
----
-
-## Response
-
-Responsible for validating HTTP responses.
-
-Includes:
-
-- ResponseValidator
-- DefaultResponseValidator
-- EmptyResponse
-
----
-
-## Decoding
-
-Decodes response data into models.
-
-Includes:
-
-- ResponseDecoder
-- JSONResponseDecoder
-
-Supports custom serialization strategies.
-
----
-
-## Logging
-
-Provides configurable network logging.
-
-Includes:
-
-- ConsoleLogger
-- CompositeLogger
-- CurlFormatter
-- PrettyLogFormatter
-- RequestLogEvent
-- ResponseLogEvent
-- ErrorLogEvent
-
-Supports:
-
-- Console logging
-- cURL generation
-- Custom loggers
-
----
-
-## Multipart
-
-Supports multipart/form-data uploads.
-
-Includes:
-
-- MultipartRequest
-- MultipartFile
-- MultipartSource
-
-Supports:
-
-- File uploads
-- Data uploads
-- Form fields
-
----
-
-## Error
-
-Centralizes networking errors.
-
-Includes:
-
-- NetworkError
-- ErrorMapper
-- DefaultErrorMapper
-
-Provides consistent error handling across the framework.
-
----
-
-# Request Lifecycle
-
-```text
-Endpoint
-   │
-   ▼
-URLRequestBuilder
-   │
-   ▼
-Request Interceptors
-   │
-   ▼
-Request Logger
-   │
-   ▼
-Retry Executor
-   │
-   ▼
-HTTPClient
-   │
-   ▼
-NetworkResponse
-   │
-   ▼
-Response Interceptors
-   │
-   ▼
-Response Validator
-   │
-   ▼
-Response Logger
-   │
-   ▼
-Response Decoder
-   │
-   ▼
-Decoded Model
-```
-
----
-
-# Getting Started
+# Quick Start
 
 ## Create a Configuration
 
@@ -326,11 +78,9 @@ let configuration = NetworkConfiguration(
 )
 ```
 
----
-
 ## Choose a Transport
 
-Using URLSession:
+### URLSession
 
 ```swift
 let client = NetworkClient(
@@ -339,7 +89,7 @@ let client = NetworkClient(
 )
 ```
 
-Using Alamofire:
+### Alamofire
 
 ```swift
 let client = NetworkClient(
@@ -347,8 +97,6 @@ let client = NetworkClient(
     httpClient: AlamofireHTTPClient()
 )
 ```
-
----
 
 ## Define an Endpoint
 
@@ -361,17 +109,7 @@ struct UsersEndpoint: Endpoint {
 }
 ```
 
----
-
 ## Execute a Request
-
-```swift
-let users: [User] = try await client.request(
-    UsersEndpoint()
-)
-```
-
-Or
 
 ```swift
 let users: [User] = try await client.get(
@@ -381,166 +119,34 @@ let users: [User] = try await client.get(
 
 ---
 
-# Customization
+# Architecture
 
-Almost every component in NetworkKit can be replaced.
-
-Examples include:
-
-- Custom HTTP clients
-- Custom retry policies
-- Custom loggers
-- Custom decoders
-- Custom validators
-- Custom interceptors
-- Custom authentication providers
-- Custom error mappers
-
-The framework is designed around protocols, making customization straightforward.
-
----
-
-# Dependency Injection
-
-NetworkKit is designed for dependency injection.
-
-```swift
-let client = NetworkClient(
-    configuration: configuration,
-    httpClient: URLSessionHTTPClient()
-)
-```
-
-Applications can swap implementations without changing business logic.
-
----
-
-# Testing
-
-Every major component is protocol-based, making unit testing simple.
-
-Examples:
-
-- Mock HTTPClient
-- Mock ResponseDecoder
-- Mock RetryPolicy
-- Mock Logger
-- Mock AuthenticationManager
-
-No real network requests are required for testing.
-
----
-
-# Swift Concurrency
-
-NetworkKit embraces modern Swift concurrency.
-
-Features include:
-
-- async/await APIs
-- Sendable-compatible protocols
-- Actor-based synchronization
-- Thread-safe abstractions
-
----
-
-# Design Principles
-
-NetworkKit is built around several architectural principles.
-
-### Protocol-Oriented Programming
-
-Behavior is defined through protocols rather than inheritance.
-
----
-
-### SOLID
-
-- Single Responsibility Principle
-- Open/Closed Principle
-- Liskov Substitution Principle
-- Interface Segregation Principle
-- Dependency Inversion Principle
-
----
-
-### Composition over Inheritance
-
-Small components are composed together to build flexible networking behavior.
-
----
-
-### Separation of Concerns
-
-Each module has a dedicated responsibility.
-
-Examples:
-
-- Builder builds requests.
-- Transport executes requests.
-- Retry handles retries.
-- Logging records network activity.
-- Decoding converts data into models.
-
----
-
-### Testability
-
-Every dependency can be mocked independently.
-
----
-
-### Extensibility
-
-Applications can extend the framework by implementing protocols instead of modifying existing code.
-
----
-
-# Why NetworkKit?
-
-NetworkKit aims to provide a networking layer that is:
-
-- Clean
-- Modular
-- Scalable
-- Testable
-- Framework-agnostic
-- Easy to understand
-- Easy to customize
-- Production-ready
-
-Instead of coupling applications to a specific networking framework, NetworkKit exposes a consistent API while allowing developers to choose the transport, logging, retry, authentication, and decoding strategies that best fit their applications.
-
----
-
-## Architecture
+## High-Level Architecture
 
 ```text
-                         Application
-                              │
-                              ▼
-                      NetworkClient
-                              │
-      ┌───────────────────────┼────────────────────────┐
-      │                       │                        │
-      ▼                       ▼                        ▼
-URLRequestBuilder        RetryExecutor             NetworkLogger
-      │                       │
-      ▼                       ▼
-RequestInterceptor     RetryPolicy
+                          Application
+                               │
+                               ▼
+                       NetworkClient
+                               │
+      ┌────────────────────────┼────────────────────────┐
+      ▼                        ▼                        ▼
+URLRequestBuilder        RetryExecutor          NetworkLogger
+      │                        │
+      ▼                        ▼
+RequestInterceptors      RetryPolicy
       │
       ▼
 HTTPClient
-      │
- ┌────┴───────────────┐
- ▼                    ▼
-URLSession      Alamofire
+ ┌───────────────┐
+ ▼               ▼
+URLSession   Alamofire
       │
       ▼
 NetworkResponse
       │
       ▼
-ResponseInterceptor
+ResponseInterceptors
       │
       ▼
 ResponseValidator
@@ -552,118 +158,50 @@ ResponseDecoder
 Decoded Model
 ```
 
+---
+
 ## Request Lifecycle
 
 ```text
-                Endpoint
-                   │
-                   ▼
-        URLRequestBuilder
-                   │
-                   ▼
-      Request Interceptor Chain
-                   │
-                   ▼
-         Authentication
-                   │
-                   ▼
-          Custom Headers
-                   │
-                   ▼
-          User-Agent / Locale
-                   │
-                   ▼
-          Request Logger
-                   │
-                   ▼
-           Retry Executor
-                   │
-                   ▼
-             HTTP Client
-          ┌────────┴────────┐
-          │                 │
-          ▼                 ▼
-    URLSession         Alamofire
-          │
-          ▼
-      NetworkResponse
-          │
-          ▼
-    Response Interceptors
-          │
-          ▼
-   Response Validation
-          │
-          ▼
-      Response Logger
-          │
-          ▼
-      Response Decoder
-          │
-          ▼
-      Decodable Model
+Endpoint
+    │
+    ▼
+URLRequestBuilder
+    │
+    ▼
+Request Interceptors
+    │
+    ▼
+Request Logger
+    │
+    ▼
+Retry Executor
+    │
+    ▼
+HTTP Client
+    │
+    ▼
+NetworkResponse
+    │
+    ▼
+Response Interceptors
+    │
+    ▼
+Response Validator
+    │
+    ▼
+Response Logger
+    │
+    ▼
+Response Decoder
+    │
+    ▼
+Decoded Model
 ```
 
-## Package Structure
+---
 
-```text
-                NetworkKit
-                     │
- ┌───────────────────┼────────────────────┐
- │                   │                    │
- ▼                   ▼                    ▼
-Authentication   Configuration        Logging
- │                   │                    │
- └──────────────┬────┴──────────────┐     │
-                ▼                   ▼     │
-             Builder            Retry     │
-                │                 │       │
-                └─────────┬───────┘       │
-                          ▼               │
-                     Transport────────────┘
-                          │
-              ┌───────────┼─────────────┐
-              ▼           ▼             ▼
-        Interceptors   Response     Decoding
-              │
-              ▼
-          Multipart
-```
-
-## NetworkClient
-
-```text
-build()
-   │
-   ▼
-request interceptors
-   │
-   ▼
-request logger
-   │
-   ▼
-retry executor
-   │
-   ▼
-HTTP client
-   │
-   ▼
-response interceptors
-   │
-   ▼
-response validator
-   │
-   ▼
-response logger
-   │
-   ▼
-response decoder
-   │
-   ▼
-return model
-```
-
-## Authentication
+## Authentication Flow
 
 ```text
 Request
@@ -677,63 +215,164 @@ AuthenticationManager
    ▼
 TokenProvider
    │
-   │ token expired?
-   │
-   ├──────No────────────► Access Token
-   │
-   ▼
-CredentialRefresher
-   │
-   ▼
-New Token
-   │
-   ▼
-Retry Request
+Expired?
+ │        │
+ │No      │Yes
+ ▼        ▼
+Token  CredentialRefresher
+            │
+            ▼
+        Refresh Token
+            │
+            ▼
+      Retry Request
 ```
 
-## Retry
+---
 
-```text
-HTTP Request
-      │
-      ▼
- Execute
-      │
-      ▼
-Success?
- │           │
- │Yes        │No
- ▼           ▼
-Return   RetryPolicy
-              │
-              ▼
-      RetryDecision
-              │
-      ┌───────┼────────────┐
-      ▼       ▼            ▼
- Retry  Retry After   Refresh Token
-      │       │            │
-      └───────┴────────────┘
-              │
-              ▼
-        Execute Again
-```
-
-## Logging
+## Retry Flow
 
 ```text
 Request
    │
    ▼
-RequestLogEvent
+Execute
    │
-   ▼
-NetworkLogger
-   │
-   ▼
-LogFormatter
-   │
-   ▼
-Console / File / Custom Logger
+Success?
+│        │
+│Yes     │No
+▼        ▼
+Return RetryPolicy
+          │
+          ▼
+   RetryDecision
+          │
+ ┌────────┼─────────┐
+ ▼        ▼         ▼
+Retry  Delay   Refresh Token
+          │
+          ▼
+      Execute Again
 ```
+
+---
+
+# Package Structure
+
+```text
+Sources
+└── NetworkKit
+    ├── Authentication
+    ├── Body
+    ├── Builder
+    ├── Configuration
+    ├── Core
+    ├── Decoding
+    ├── Error
+    ├── Interceptors
+    ├── Logging
+    ├── Multipart
+    ├── Response
+    ├── Retry
+    └── Transport
+```
+
+---
+
+# Modules
+
+| Module | Responsibility |
+|----------|----------------|
+| Authentication | Token management and authorization |
+| Builder | Builds URLRequest objects |
+| Body | Request body implementations |
+| Transport | Executes HTTP requests |
+| Retry | Retry policies and retry execution |
+| Interceptors | Request & response middleware |
+| Response | HTTP response validation |
+| Decoding | Response decoding |
+| Logging | Request/response logging |
+| Multipart | Multipart uploads |
+| Error | Error mapping |
+
+---
+
+# Customization
+
+NetworkKit is built around protocols, making every major component replaceable.
+
+You can provide custom implementations for:
+
+- HTTPClient
+- ResponseDecoder
+- ResponseValidator
+- RetryPolicy
+- NetworkLogger
+- ErrorMapper
+- RequestInterceptor
+- ResponseInterceptor
+- CredentialRefresher
+
+---
+
+# Dependency Injection
+
+```swift
+let client = NetworkClient(
+    configuration: configuration,
+    httpClient: URLSessionHTTPClient()
+)
+```
+
+Because NetworkKit depends on abstractions rather than concrete implementations, it integrates easily with dependency injection frameworks.
+
+---
+
+# Testing
+
+Every major component is protocol-based, making unit testing straightforward.
+
+Examples include:
+
+- MockHTTPClient
+- MockRetryPolicy
+- MockResponseDecoder
+- MockLogger
+- MockCredentialRefresher
+
+No real network requests are required.
+
+---
+
+# Design Principles
+
+NetworkKit is built around:
+
+- Protocol-Oriented Programming
+- SOLID Principles
+- Composition over Inheritance
+- Separation of Concerns
+- Dependency Injection
+- Swift Concurrency
+- Testability
+- Extensibility
+
+---
+
+# Roadmap
+
+- [x] URLSession Transport
+- [x] Alamofire Transport
+- [x] Authentication
+- [x] Token Refresh
+- [x] Retry Policies
+- [x] Multipart Uploads
+- [x] Logging
+- [x] Response Validation
+- [ ] WebSocket Support
+- [ ] Download Manager
+- [ ] Upload Progress
+- [ ] Metrics Collection
+
+---
 

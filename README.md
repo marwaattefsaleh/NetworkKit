@@ -5,7 +5,6 @@
 [![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)]()
 [![Platform](https://img.shields.io/badge/iOS-16%2B-blue.svg)]()
 [![SPM](https://img.shields.io/badge/SPM-Compatible-red.svg)]()
-[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
 NetworkKit is a modular networking framework built with **Swift Concurrency**, **Protocol-Oriented Programming**, and **SOLID principles**.
 
